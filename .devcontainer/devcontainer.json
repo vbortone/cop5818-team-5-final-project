@@ -37,7 +37,9 @@
 				"redhat.vscode-yaml"
 			]
 		}
-	}
+	},
+
+	"remoteUser": "root"
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
