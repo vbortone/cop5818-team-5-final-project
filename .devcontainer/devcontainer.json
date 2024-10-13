@@ -13,7 +13,6 @@
 		"vscode": {
 			"extensions": [
 				"imgildev.vscode-auto-barrel",
-				"aaron-bond.better-comments",
 				"vivaxy.vscode-conventional-commits",
 				"ms-vscode-remote.remote-containers",
 				"mikestead.dotenv",
