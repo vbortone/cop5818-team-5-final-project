@@ -1,0 +1,37 @@
+{
+	"name": "Node.js & TypeScript",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
+	"remoteUser": "root",
+	"waitFor": "updateContentCommand",
+	"updateContentCommand": ["pnpm", "i"],
+	"postCreateCommand": ["pnpm", "dev"],
+	"forwardPorts": [3000],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"imgildev.vscode-auto-barrel",
+				"vivaxy.vscode-conventional-commits",
+				"ms-vscode-remote.remote-containers",
+				"mikestead.dotenv",
+				"editorconfig.editorconfig",
+				"dsznajder.es7-react-js-snippets",
+				"dbaeumer.vscode-eslint",
+				"github.codespaces",
+				"github.vscode-pull-request-github",
+				"github.remotehub",
+				"codezombiech.gitignore",
+				"xabikos.javascriptsnippets",
+				"orta.vscode-jest",
+				"ms-vsliveshare.vsliveshare",
+				"mongodb.mongodb-vscode",
+				"pulkitgangwar.nextjs-snippets",
+				"esbenp.prettier-vscode",
+				"mechatroner.rainbow-csv",
+				"ms-vscode.remote-repositories",
+				"humao.rest-client",
+				"bradlc.vscode-tailwindcss",
+				"redhat.vscode-yaml"
+			]
+		}
+	}
+}
