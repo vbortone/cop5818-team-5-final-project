@@ -1,3 +1,6 @@
+// src/app/test-client-form/page.tsx
+'use client';
+
 import { useState } from 'react';
 
 const TestClientForm = () => {
