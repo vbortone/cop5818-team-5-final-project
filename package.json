@@ -2,8 +2,8 @@
   "name": "cop5818-team-5-final-project",
   "version": "0.1.0",
   "prisma": {
-  "schema": "src/prisma/schema.prisma"
-},
+    "schema": "src/prisma/schema.prisma"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -19,7 +19,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.453.0",
-    "mongoose": "^8.7.3",
     "next": "14.2.15",
     "react": "^18",
     "react-dom": "^18",
@@ -27,7 +26,6 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.96",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
