@@ -33,8 +33,5 @@
 				"redhat.vscode-yaml"
 			]
 		}
-	},
-	"features": {
-		"ghcr.io/devcontainers/features/mongodb:1": {}
 	}
 }
