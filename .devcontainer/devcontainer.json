@@ -30,7 +30,9 @@
 				"ms-vscode.remote-repositories",
 				"humao.rest-client",
 				"bradlc.vscode-tailwindcss",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"prisma.prisma",
+				"willluke.nextjs"
 			]
 		}
 	}
