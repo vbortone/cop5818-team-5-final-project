@@ -5,7 +5,7 @@
 	"waitFor": "updateContentCommand",
 	"updateContentCommand": ["pnpm", "i"],
 	"postCreateCommand": ["pnpm", "dev"],
-	"forwardPorts": [3000, 27017],
+	"forwardPorts": [3000],
 	"customizations": {
 		"vscode": {
 			"extensions": [
