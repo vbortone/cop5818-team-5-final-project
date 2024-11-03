@@ -46,3 +46,5 @@ workspace.json
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+/scratch/
