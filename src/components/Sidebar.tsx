@@ -1,4 +1,4 @@
-import { HomeIcon, UsersIcon } from "@heroicons/react/outline";
+import { HomeIcon, PersonIcon } from "@radix-ui/react-icons";
 
 export function Sidebar() {
   return (
@@ -13,7 +13,7 @@ export function Sidebar() {
             <span>Allocation</span>
           </li>
           <li className="p-4 flex items-center gap-2 hover:bg-gray-800 cursor-pointer">
-            <UsersIcon className="w-5 h-5" />
+            <PersonIcon className="w-5 h-5" />
             <span>Education</span>
           </li>
         </ul>
