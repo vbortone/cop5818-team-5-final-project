@@ -31,7 +31,7 @@ export default function ExerciseChart() {
       // Use an arrow function to avoid strict mode issues
       const fetchData = async () => {
         try {
-          const response = await fetch("/api/getHistoricalData");
+          const response = await fetch("/api/historicaldata");
           const data = await response.json();
 
           // Prepare data for the chart

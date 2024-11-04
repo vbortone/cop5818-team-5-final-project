@@ -25,7 +25,7 @@ export default function Page() {
     // Fetch data from the backend API
     async function fetchData() {
       try {
-        const response = await fetch("/api/getMarketData");
+        const response = await fetch("/api/marketdata");
         const data = await response.json();
         setMarketData(data);
         setLoading(false);
