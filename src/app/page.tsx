@@ -23,12 +23,12 @@ const WelcomePage: FC = () => {
         </p>
       </header>
       <main className="flex flex-col items-center mt-10">
-        <button 
+        <button
           onClick={navigateToPortfolio}
           className="px-6 py-3 bg-primary text-primary-foreground rounded hover:bg-primary-foreground hover:text-primary transition duration-300 ease-in-out mb-4">
           Portfolio Workshop
         </button>
-        <button 
+        <button
           onClick={navigateToEducation}
           className="px-6 py-3 bg-primary text-primary-foreground rounded hover:bg-primary-foreground hover:text-primary transition duration-300 ease-in-out">
           Educational Videos
