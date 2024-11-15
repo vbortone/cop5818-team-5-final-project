@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { META_THEME_COLORS, siteConfig } from "@/config/site";
+import TopNav from "@/components/top-nav";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,8 +17,16 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Robo-Advize Finance",
-  description: "Cutting Edge Finance Education",
+  title: {
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: ["finance", "ai", "education", "portfolio", "investment"],
+};
+
+export const viewport: Viewport = {
+  themeColor: META_THEME_COLORS.light,
 };
 
 export default function RootLayout({
