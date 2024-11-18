@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -10,7 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useState } from "react";
 
 type ChartData = {
   name: string;
@@ -18,45 +16,11 @@ type ChartData = {
   spyPerformance: number;
 };
 
-export default function ExerciseChart() {
-  const [chartData, setChartData] = useState<ChartData[]>([]);
-  const [isClient, setIsClient] = useState(false);
+type ExerciseChartProps = {
+  data: ChartData[];
+};
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      // Use an arrow function to avoid strict mode issues
-      const fetchData = async () => {
-        try {
-          const response = await fetch("/api/historicaldata");
-          const data = await response.json();
-
-          // Prepare data for the chart
-          const formattedData = data.portfolioData.map(
-            (entry: any, index: number) => ({
-              name: entry.name, // YYYY-MM format
-              portfolioGrowth: entry.average,
-              spyPerformance: data.spyPerformance[index]?.value || 0,
-            })
-          );
-
-          setChartData(formattedData);
-        } catch (error) {
-          console.error("Error fetching data: ", error);
-        }
-      };
-
-      fetchData();
-    }
-  }, [isClient]);
-
-  if (!isClient) {
-    return null; // Return nothing until client-side rendering happens
-  }
-
+export default function ExerciseChart({ data }: ExerciseChartProps) {
   return (
     <div className="bg-white shadow-md p-6 rounded-lg mb-6">
       <h2 className="text-xl font-bold mb-4">
@@ -64,7 +28,7 @@ export default function ExerciseChart() {
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
-          data={chartData}
+          data={data}
           margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
