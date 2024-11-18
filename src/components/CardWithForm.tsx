@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,15 @@ import {
 } from "@/components/ui/select";
 
 export function CardWithForm() {
+  const [selectedFramework, setSelectedFramework] = useState<
+    string | undefined
+  >(undefined);
+
+  // Handling value change for Select
+  const handleSelectChange = (value: string) => {
+    setSelectedFramework(value);
+  };
+
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -37,13 +47,37 @@ export function CardWithForm() {
               <Label htmlFor="framework">Framework</Label>
               <Select>
                 <SelectTrigger id="framework">
-                  <SelectValue placeholder="Select" />
+                  {selectedFramework ? (
+                    <SelectValue>{selectedFramework}</SelectValue>
+                  ) : (
+                    <span className="text-gray-500">Select</span>
+                  )}
                 </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="next">Next.js</SelectItem>
-                  <SelectItem value="sveltekit">SvelteKit</SelectItem>
-                  <SelectItem value="astro">Astro</SelectItem>
-                  <SelectItem value="nuxt">Nuxt.js</SelectItem>
+                <SelectContent>
+                  <SelectItem
+                    value="next"
+                    onClick={() => handleSelectChange("Next.js")}
+                  >
+                    Next.js
+                  </SelectItem>
+                  <SelectItem
+                    value="sveltekit"
+                    onClick={() => handleSelectChange("SvelteKit")}
+                  >
+                    SvelteKit
+                  </SelectItem>
+                  <SelectItem
+                    value="astro"
+                    onClick={() => handleSelectChange("Astro")}
+                  >
+                    Astro
+                  </SelectItem>
+                  <SelectItem
+                    value="nuxt"
+                    onClick={() => handleSelectChange("Nuxt.js")}
+                  >
+                    Nuxt.js
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
