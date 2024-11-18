@@ -1,13 +1,20 @@
-export default function RetirementForm() {
+import { FormEvent } from "react";
+
+type RetirementFormProps = {
+  onSubmit: (formData: FormEvent<HTMLFormElement>) => Promise<void>;
+};
+
+export default function RetirementForm({ onSubmit }: RetirementFormProps) {
   return (
     <div className="bg-white shadow-md p-6 rounded-lg">
       <h2 className="text-xl font-bold mb-4">Enter Retirement Information</h2>
-      <form>
+      <form onSubmit={onSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block mb-1 font-medium">Age</label>
             <input
               type="number"
+              name="age"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your age"
             />
@@ -16,6 +23,7 @@ export default function RetirementForm() {
             <label className="block mb-1 font-medium">Retirement Age</label>
             <input
               type="number"
+              name="retirementAge"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter retirement age"
             />
@@ -26,6 +34,7 @@ export default function RetirementForm() {
             </label>
             <input
               type="text"
+              name="jobTitle"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your job title or profession"
             />
@@ -34,6 +43,7 @@ export default function RetirementForm() {
             <label className="block mb-1 font-medium">Income</label>
             <input
               type="number"
+              name="income"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your income"
             />
@@ -42,6 +52,7 @@ export default function RetirementForm() {
             <label className="block mb-1 font-medium">Savings</label>
             <input
               type="number"
+              name="savings"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter your current savings"
             />
@@ -50,6 +61,7 @@ export default function RetirementForm() {
             <label className="block mb-1 font-medium">Savings Percentage</label>
             <input
               type="number"
+              name="savingsPercentage"
               className="w-full p-2 border border-gray-300 rounded"
               placeholder="Enter savings percentage"
             />

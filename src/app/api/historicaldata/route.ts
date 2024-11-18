@@ -23,66 +23,72 @@ export async function GET(req: NextRequest) {
       "EDU",
     ];
 
-    // Calculate date range for the last 3 years
-    const currentYear = new Date().getFullYear();
-    const startDate = `${currentYear - 3}-01-01`; // 3 years ago from the current year
-    const endDate = `${currentYear}-12-31`;
+    // Calculate date range for the past year
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setFullYear(endDate.getFullYear() - 1); // One year ago
 
-    // Fetch historical data for each ETF and calculate the average for each month
-    const monthlyAggregatedData: {
+    // Fetch daily historical data for each ETF and calculate the daily average
+    const dailyAggregatedData: {
       [date: string]: { date: string; sum: number; count: number };
     } = {};
+
     for (const etf of etfs) {
       const rawData = await yahooFinance.chart(etf, {
-        period1: startDate,
-        period2: endDate,
-        interval: "1mo", // Monthly data
+        period1: startDate.toISOString().split("T")[0],
+        period2: endDate.toISOString().split("T")[0],
+        interval: "1d", // Daily data
       });
 
-      const data =
-        convertToHistoricalResult(rawData);
+      const data = convertToHistoricalResult(rawData);
 
       data.forEach((entry) => {
-        const month = entry.date.toISOString().slice(0, 7); // Format as YYYY-MM
-        if (!monthlyAggregatedData[month]) {
-          monthlyAggregatedData[month] = {
-            date: month,
+        const date = entry.date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+        if (!dailyAggregatedData[date]) {
+          dailyAggregatedData[date] = {
+            date: date,
             sum: 0,
             count: 0,
           };
         }
-        monthlyAggregatedData[month].sum += entry.close ?? 0;
-        monthlyAggregatedData[month].count++;
+        dailyAggregatedData[date].sum += entry.close ?? 0;
+        dailyAggregatedData[date].count++;
       });
     }
 
-    // Calculate the average for each month
-    const portfolioData = Object.values(monthlyAggregatedData).map((entry) => ({
-      name: entry.date,
-      average: entry.sum / entry.count,
+    // Calculate the average for each day
+    const portfolioData = Object.values(dailyAggregatedData).map((entry) => ({
+      date: entry.date,
+      etfPortfolio: entry.sum / entry.count,
     }));
 
-    // Fetch SPY data for the same period to use as a comparison
+    // Fetch daily SPY data for the same period to use as a comparison
     const rawSpyData = await yahooFinance.chart("SPY", {
-      period1: startDate,
-      period2: endDate,
-      interval: "1mo", // Monthly data
+      period1: startDate.toISOString().split("T")[0],
+      period2: endDate.toISOString().split("T")[0],
+      interval: "1d", // Daily data
     });
 
     const spyData = convertToHistoricalResult(rawSpyData);
 
     const spyPerformance = spyData.map((entry) => ({
-      name: entry.date.toISOString().slice(0, 7),
-      value: entry.close ?? 0,
+      date: entry.date.toISOString().split("T")[0],
+      spx: entry.close ?? 0,
     }));
 
-    return NextResponse.json(
-      {
-        portfolioData,
-        spyPerformance,
-      },
-      { status: 200 }
-    );
+    // Merge portfolioData and spyPerformance by date for the frontend chart
+    const mergedData = portfolioData.map((portfolioEntry) => {
+      const spyEntry = spyPerformance.find(
+        (spyEntry) => spyEntry.date === portfolioEntry.date
+      );
+      return {
+        date: portfolioEntry.date,
+        etfPortfolio: portfolioEntry.etfPortfolio,
+        spx: spyEntry?.spx || 0,
+      };
+    });
+
+    return NextResponse.json(mergedData, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
