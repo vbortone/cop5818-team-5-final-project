@@ -7,7 +7,10 @@ export async function POST(req: NextRequest) {
   const { etfs } = await req.json(); // Parse JSON from request body
 
   if (!Array.isArray(etfs) || etfs.length === 0) {
-    return NextResponse.json({ error: "Invalid ETF list provided." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid ETF list provided." },
+      { status: 400 }
+    );
   }
 
   const endDate = new Date();
@@ -52,7 +55,10 @@ export async function POST(req: NextRequest) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     } else {
-      return NextResponse.json({ error: "Unknown error occurred" }, { status: 500 });
+      return NextResponse.json(
+        { error: "Unknown error occurred" },
+        { status: 500 }
+      );
     }
   }
 }
