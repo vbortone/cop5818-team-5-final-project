@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronRight, PieChart, TrendingUp, ShieldCheck } from "lucide-react";
+import { PieChart, TrendingUp, ShieldCheck } from "lucide-react";
 
 export default async function Home() {
 
@@ -34,13 +34,6 @@ export default async function Home() {
                     Our AI-powered robo advisor optimizes your investments,
                     ensuring your money works as hard as you do.
                   </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button asChild>
-                    <Link href="/signup">
-                      Learn More <ChevronRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </div>
