@@ -38,11 +38,8 @@ export default async function Home() {
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild>
                     <Link href="/signup">
-                      Get Started <ChevronRight className="ml-2 h-4 w-4" />
+                      Learn More <ChevronRight className="ml-2 h-4 w-4" />
                     </Link>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/learn-more">Learn More</Link>
                   </Button>
                 </div>
               </div>
