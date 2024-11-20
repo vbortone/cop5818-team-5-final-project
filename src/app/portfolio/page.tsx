@@ -188,24 +188,17 @@ export default function Page() {
           Portfolio Growth vs SPX Performance (1-Year Daily)
         </h3>
         <div className="flex justify-center">
-          <LineChart width={600} height={300} data={chartData}>
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            {/* Render lines if chartData has entries */}
-            {chartData.length > 0 && (
-              <>
-                <Line
-                  type="monotone"
-                  dataKey="etfPortfolio"
-                  stroke="#8884d8"
-                  name="ETF Portfolio"
-                />
-                <Line type="monotone" dataKey="spx" stroke="#82ca9d" name="SPX" />
-              </>
-            )}
-          </LineChart>
+          {chartData.length === 0 && <p>No chart data available</p>}
+          {chartData.length > 0 && (
+            <LineChart width={600} height={300} data={chartData}>
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="etfPortfolio" stroke="#8884d8" name="ETF Portfolio" />
+              <Line type="monotone" dataKey="spx" stroke="#82ca9d" name="SPX" />
+            </LineChart>
+          )}
         </div>
       </div>
 
