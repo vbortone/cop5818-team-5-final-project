@@ -24,6 +24,7 @@ export default async function Home() {
                 height={550}
                 src="/images/hero-1.png"
                 width={550}
+                priority={true}
               />
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
