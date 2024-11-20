@@ -1,5 +1,3 @@
-// app/api/getEtfRecommendations/route.ts
-
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 

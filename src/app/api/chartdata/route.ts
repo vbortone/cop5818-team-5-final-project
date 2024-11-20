@@ -1,5 +1,4 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server"; // Import NextResponse
+import { NextRequest, NextResponse } from "next/server";
 import yahooFinance from "yahoo-finance2";
 import { convertToHistoricalResult } from "@/lib/yf2";
 
