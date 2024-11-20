@@ -1,5 +1,6 @@
 import yahooFinance from "yahoo-finance2";
-import { NextResponse } from "next/server"; // Removed NextRequest since it's unused
+import { NextResponse } from "next/server";
+import { convertToHistoricalResult } from "@/lib/yf2";
 
 // Function to fetch historical data and calculate MoM, QoQ, and YTD changes
 const fetchChangeMetrics = async (ticker: string) => {
@@ -10,11 +11,13 @@ const fetchChangeMetrics = async (ticker: string) => {
   lastQuarter.setMonth(lastQuarter.getMonth() - 3);
   const startOfYear = new Date(today.getFullYear(), 0, 1);
 
-  const historicalData = await yahooFinance.historical(ticker, {
+  const rawData = await yahooFinance.chart(ticker, {
     period1: startOfYear.toISOString().split("T")[0],
     period2: today.toISOString().split("T")[0],
     interval: "1mo",
   });
+
+  const historicalData = convertToHistoricalResult(rawData);
 
   if (historicalData.length === 0) {
     return { MoM: 0, QoQ: 0, YTD: 0 };

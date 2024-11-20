@@ -78,7 +78,7 @@ export default function Page() {
     try {
       console.log("Form values:", formValues);
 
-      const response = await axios.post("/api/getEtfRecommendations", formValues);
+      const response = await axios.post("/api/etf-recommendations", formValues);
 
       if (response.status === 200) {
         const recommendedEtfs = response.data.recommendations;
@@ -91,7 +91,7 @@ export default function Page() {
           setEtfRecommendations([]);
         }
 
-        const chartResponse = await axios.post("/api/getChartData", {
+        const chartResponse = await axios.post("/api/chartdata", {
           etfs: recommendedEtfs.map((etf: EtfRecommendation) => etf.ticker),
         });
 
