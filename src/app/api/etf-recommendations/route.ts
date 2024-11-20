@@ -1,14 +1,13 @@
-// app/api/getEtfRecommendations/route.ts
-
-import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { NextResponse } from "next/server";
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 export async function POST(request: Request) {
-  const { age, retirementAge, jobTitle, income, savings, savingsPercentage } = await request.json();
+  const { age, retirementAge, jobTitle, income, savings, savingsPercentage } =
+    await request.json();
 
   try {
     const response = await openai.chat.completions.create({
@@ -16,7 +15,8 @@ export async function POST(request: Request) {
       messages: [
         {
           role: "system",
-          content: "You are an AI financial advisor. Respond only with valid JSON.",
+          content:
+            "You are an AI financial advisor. Respond only with valid JSON.",
         },
         {
           role: "user",
@@ -38,7 +38,10 @@ export async function POST(request: Request) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     } else {
-      return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
+      return NextResponse.json(
+        { error: "An unknown error occurred" },
+        { status: 500 }
+      );
     }
   }
 }
