@@ -6,24 +6,27 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: Request) {
-  const { age, retirementAge, jobTitle, income, savings, savingsPercentage } =
-    await request.json();
+  const { name, age, retirementAge, jobTitle, income, savings, savingsPercentage } =
+  await request.json();
 
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an AI financial advisor. Respond only with valid JSON.",
-        },
-        {
-          role: "user",
-          content: `Please recommend some ETFs for a user with the following information: Age: ${age}, Retirement Age: ${retirementAge}, Job Title: ${jobTitle}, Income: ${income}, Savings: ${savings}, Savings Percentage: ${savingsPercentage}. Respond with a JSON array where each ETF has a 'ticker' and 'name'.`,
-        },
-      ],
-    });
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are an AI financial advisor. Respond only with valid JSON.",
+          },
+          {
+            role: "user",
+            content: `Please recommend some ETFs for a user with the following information: Name: ${name}, Age: ${age}, Retirement Age: ${retirementAge}, Job Title: ${jobTitle}, Income: ${income}, Savings: ${savings}, Savings Percentage: ${savingsPercentage}. Respond with a JSON array where each ETF has a 'ticker' and 'name'.`,
+          },
+        ],
+      });
+      console.log("OpenAI API Key:", process.env.OPENAI_API_KEY); // Debugging
+
+      console.log("OpenAI Response:", response); // Debugging
 
     let recommendations = [];
     let content = response.choices[0].message?.content || "[]";
