@@ -137,8 +137,7 @@ export default function Page() {
         } else {
           console.error(
             "Expected an array for ETF recommendations but received:",
-            recommendedEtfs
-          );
+            recommendedEtfs);
           setEtfRecommendations([]);
         }
       } else {
