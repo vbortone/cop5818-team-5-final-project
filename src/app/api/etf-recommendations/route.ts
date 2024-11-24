@@ -30,6 +30,7 @@ export async function POST(request: Request) {
 
     let recommendations = [];
     let content = response.choices[0].message?.content || "[]";
+    console.log("Raw OpenAI Content:", response.choices[0].message?.content);
     content = content.trim();
     if (content.startsWith("```json")) content = content.slice(7);
     if (content.startsWith("```")) content = content.slice(3);
