@@ -16,12 +16,23 @@ generator client {
 // In Prisma, MongoDB ObjectIDs are represented as String with @db.ObjectId and @default(auto()).
 
 model Client {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  age             Int
-  retirementAge   Int
-  jobTitle        String
-  income          Float
-  currentSavings  Float
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  age               Int
+  retirementAge     Int
+  jobTitle          String
+  income            Float
+  currentSavings    Float
   savingsPercentage Float
+  recommendations   Recommendation[] @relation("ClientRecommendations")
+  createdAt         DateTime         @default(now())
+}
+
+model Recommendation {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  ticker    String
+  name      String
+  client    Client   @relation("ClientRecommendations", fields: [clientId], references: [id])
+  clientId  String   @db.ObjectId
+  createdAt DateTime @default(now())
 }
