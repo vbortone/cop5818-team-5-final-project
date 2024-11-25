@@ -24,7 +24,6 @@ export async function POST(request: Request) {
           },
         ],
       });
-      console.log("OpenAI API Key:", process.env.OPENAI_API_KEY); // Debugging
 
       console.log("OpenAI Response:", response); // Debugging
 
