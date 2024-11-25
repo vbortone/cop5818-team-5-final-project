@@ -56,8 +56,9 @@ export default function Page() {
     formData: React.FormEvent<HTMLFormElement>
   ) => {
     formData.preventDefault();
-
+  
     const target = formData.target as typeof formData.target & {
+      name: { value: string };
       age: { value: string };
       retirementAge: { value: string };
       jobTitle: { value: string };
@@ -65,50 +66,79 @@ export default function Page() {
       savings: { value: string };
       savingsPercentage: { value: string };
     };
-
+  
     const formValues = {
+      name: target.name.value,
       age: target.age.value,
       retirementAge: target.retirementAge.value,
       jobTitle: target.jobTitle.value,
       income: target.income.value,
-      savings: target.savings.value,
+      currentSavings: target.savings.value,
       savingsPercentage: target.savingsPercentage.value,
     };
-
+  
     try {
       console.log("Form values:", formValues);
-
+  
+      // Fetch ETF recommendations
       const response = await axios.post("/api/etf-recommendations", formValues);
-
+  
       if (response.status === 200) {
         const recommendedEtfs = response.data.recommendations;
         console.log("ETF recommendations:", recommendedEtfs);
-
+  
         if (Array.isArray(recommendedEtfs)) {
           setEtfRecommendations(recommendedEtfs);
-        } else {
-          console.error("Expected an array for ETF recommendations but received:", recommendedEtfs);
-          setEtfRecommendations([]);
-        }
-
-        const chartResponse = await axios.post("/api/chartdata", {
-          etfs: recommendedEtfs.map((etf: EtfRecommendation) => etf.ticker),
-        });
-
-        if (chartResponse.status === 200 && Array.isArray(chartResponse.data) && chartResponse.data.length > 0) {
-          console.log("Chart data received:", chartResponse.data);
-
-          // Validate that each data point has the required properties
-          chartResponse.data.forEach((dataPoint, index) => {
-            if (!dataPoint.date || dataPoint.etfPortfolio === undefined || dataPoint.spx === undefined) {
-              console.error(`Invalid data format at index ${index}:`, dataPoint);
-            }
+  
+          // Send client data and recommendations to the database
+          const dbResponse = await axios.post("/api/clients", {
+            ...formValues,
+            recommendations: recommendedEtfs, // Attach recommendations
           });
-
-          setChartData(chartResponse.data);
+  
+          if (dbResponse.status === 201) {
+            console.log(
+              "Client data and ETF recommendations saved:",
+              dbResponse.data
+            );
+          } else {
+            console.error("Error saving client data:", dbResponse.data.error);
+          }
+  
+          // Fetch and process chart data
+          const chartResponse = await fetch("/api/chartdata");
+  
+          if (chartResponse.ok) {
+            const chartData = await chartResponse.json();
+  
+            if (Array.isArray(chartData) && chartData.length > 0) {
+              console.log("Chart data received:", chartData);
+  
+              // Validate each data point
+              chartData.forEach((dataPoint, index) => {
+                if (
+                  !dataPoint.date ||
+                  dataPoint.etfPortfolio === undefined ||
+                  dataPoint.spx === undefined
+                ) {
+                  console.error(`Invalid data format at index ${index}:`, dataPoint);
+                }
+              });
+  
+              setChartData(chartData); // Save chart data to state
+            } else {
+              console.error("No chart data received or unexpected format");
+              setChartData([]); // Clear chart data if invalid
+            }
+          } else {
+            console.error("Failed to load chart data:", chartResponse.status);
+            throw new Error("Failed to load chart data");
+          }
         } else {
-          console.error("No data received for chart or unexpected format");
-          setChartData([]); // Clear chart data if no valid data is returned
+          console.error(
+            "Expected an array for ETF recommendations but received:",
+            recommendedEtfs);
+          setEtfRecommendations([]);
         }
       } else {
         console.error("Unexpected response status:", response.status);
@@ -118,7 +148,7 @@ export default function Page() {
       console.error("Error in handleEtfRecommendations:", error);
     }
   };
-
+  
   if (loading) {
     return <p>Loading market data...</p>;
   }

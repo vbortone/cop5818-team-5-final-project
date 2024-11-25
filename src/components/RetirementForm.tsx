@@ -11,6 +11,15 @@ export default function RetirementForm({ onSubmit }: RetirementFormProps) {
       <form onSubmit={onSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
+          <label className="block mb-1 font-medium">Name</label>
+            <input
+              type="text"
+              name="name"
+              className="w-full p-2 border border-gray-300 rounded"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div>
             <label className="block mb-1 font-medium">Age</label>
             <input
               type="number"
