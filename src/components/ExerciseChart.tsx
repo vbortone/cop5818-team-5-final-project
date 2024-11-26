@@ -1,58 +1,63 @@
-"use client";
+import { NextRequest, NextResponse } from "next/server";
+import yahooFinance from "yahoo-finance2";
+import { convertToHistoricalResult } from "@/lib/yf2";
 
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+export async function POST(req: NextRequest) {
+  const { etfs } = await req.json(); // Parse JSON from request body
 
-type ChartData = {
-  name: string;
-  portfolioGrowth: number;
-  spyPerformance: number;
-};
+  if (!Array.isArray(etfs) || etfs.length === 0) {
+    return NextResponse.json(
+      { error: "Invalid ETF list provided." },
+      { status: 400 }
+    );
+  }
 
-type ExerciseChartProps = {
-  data: ChartData[];
-};
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setFullYear(endDate.getFullYear() - 1); // 1 year ago
 
-export default function ExerciseChart({ data }: ExerciseChartProps) {
-  return (
-    <div className="bg-white shadow-md p-6 rounded-lg mb-6">
-      <h2 className="text-xl font-bold mb-4">
-        Portfolio Growth vs SPY Performance (Last 3 Years Monthly)
-      </h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          data={data}
-          margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="portfolioGrowth"
-            stroke="#000000"
-            strokeWidth={2}
-            dot
-            name="Portfolio Growth"
-          />
-          <Line
-            type="monotone"
-            dataKey="spyPerformance"
-            stroke="#b3b3b3"
-            strokeWidth={2}
-            dot
-            name="SPY Performance"
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
+  const dailyAggregatedData: {
+    [date: string]: { date: string; sum: number; count: number };
+  } = {};
+
+  try {
+    for (const etf of etfs) {
+      const rawData = await yahooFinance.chart(etf, {
+        period1: startDate.toISOString().split("T")[0],
+        period2: endDate.toISOString().split("T")[0],
+        interval: "1d", // Daily data
+      });
+
+      const data = convertToHistoricalResult(rawData);
+
+      data.forEach((entry) => {
+        const date = entry.date.toISOString().split("T")[0];
+        if (!dailyAggregatedData[date]) {
+          dailyAggregatedData[date] = { date, sum: 0, count: 0 };
+        }
+        dailyAggregatedData[date].sum += entry.close ?? 0;
+        dailyAggregatedData[date].count++;
+      });
+    }
+
+    const chartData = Object.values(dailyAggregatedData).map((entry) => ({
+      date: entry.date,
+      etfPortfolio: entry.sum / entry.count,
+      spx: (entry.sum / entry.count) * 0.95, // Example SPX calculation
+    }));
+
+    console.log("Returning chart data:", chartData); // Debugging log
+    return NextResponse.json(chartData, { status: 200 });
+  } catch (error: unknown) {
+    console.error("Error fetching ETF data:", error);
+
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      return NextResponse.json(
+        { error: "Unknown error occurred" },
+        { status: 500 }
+      );
+    }
+  }
 }
