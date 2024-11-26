@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import RetirementForm from "@/components/RetirementForm";
+import RetirementForm from "@/components/retirement-form";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
 type MarketData = {
@@ -56,7 +56,7 @@ export default function Page() {
     formData: React.FormEvent<HTMLFormElement>
   ) => {
     formData.preventDefault();
-  
+
     const target = formData.target as typeof formData.target & {
       name: { value: string };
       age: { value: string };
@@ -66,7 +66,7 @@ export default function Page() {
       savings: { value: string };
       savingsPercentage: { value: string };
     };
-  
+
     const formValues = {
       name: target.name.value,
       age: target.age.value,
@@ -76,26 +76,26 @@ export default function Page() {
       currentSavings: target.savings.value,
       savingsPercentage: target.savingsPercentage.value,
     };
-  
+
     try {
       console.log("Form values:", formValues);
-  
+
       // Fetch ETF recommendations
       const response = await axios.post("/api/etf-recommendations", formValues);
-  
+
       if (response.status === 200) {
         const recommendedEtfs = response.data.recommendations;
         console.log("ETF recommendations:", recommendedEtfs);
-  
+
         if (Array.isArray(recommendedEtfs)) {
           setEtfRecommendations(recommendedEtfs);
-  
+
           // Send client data and recommendations to the database
           const dbResponse = await axios.post("/api/clients", {
             ...formValues,
             recommendations: recommendedEtfs, // Attach recommendations
           });
-  
+
           if (dbResponse.status === 201) {
             console.log(
               "Client data and ETF recommendations saved:",
@@ -104,7 +104,7 @@ export default function Page() {
           } else {
             console.error("Error saving client data:", dbResponse.data.error);
           }
-  
+
           // Fetch and process chart data
           console.log("Fetching chart data with POST request:", {
             etfs: recommendedEtfs.map((etf) => etf.ticker),
@@ -147,7 +147,7 @@ export default function Page() {
       console.error("Error in handleEtfRecommendations:", error);
     }
   };
-  
+
   if (loading) {
     return <p>Loading market data...</p>;
   }

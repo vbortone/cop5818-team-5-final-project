@@ -1,7 +1,7 @@
 "use client";
 
-import LoginButton from "@/components/LoginButton";
-import MainNav from "@/components/MainNav";
+import LoginButton from "@/components/login-button";
+import MainNav from "@/components/main-nav";
 import Link from "next/link";
 import { PieChart } from "lucide-react";
 import { useUser } from "@auth0/nextjs-auth0/client";
