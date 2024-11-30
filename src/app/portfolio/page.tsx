@@ -106,38 +106,37 @@ export default function Page() {
           }
   
           // Fetch and process chart data
-          const chartResponse = await fetch("/api/chartdata");
+          console.log("Fetching chart data with POST request:", {
+            etfs: recommendedEtfs.map((etf) => etf.ticker),
+          });
+  
+          const chartResponse = await fetch("/api/chartdata", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ etfs: recommendedEtfs.map((etf) => etf.ticker) }),
+          });
   
           if (chartResponse.ok) {
             const chartData = await chartResponse.json();
+            console.log("Received chart data:", chartData);
   
             if (Array.isArray(chartData) && chartData.length > 0) {
-              console.log("Chart data received:", chartData);
-  
-              // Validate each data point
-              chartData.forEach((dataPoint, index) => {
-                if (
-                  !dataPoint.date ||
-                  dataPoint.etfPortfolio === undefined ||
-                  dataPoint.spx === undefined
-                ) {
-                  console.error(`Invalid data format at index ${index}:`, dataPoint);
-                }
-              });
-  
-              setChartData(chartData); // Save chart data to state
+              setChartData(chartData);
             } else {
               console.error("No chart data received or unexpected format");
               setChartData([]); // Clear chart data if invalid
             }
           } else {
-            console.error("Failed to load chart data:", chartResponse.status);
+            console.error(
+              `Failed to fetch chart data. Status: ${chartResponse.status}, Message: ${chartResponse.statusText}`
+            );
             throw new Error("Failed to load chart data");
           }
         } else {
           console.error(
             "Expected an array for ETF recommendations but received:",
-            recommendedEtfs);
+            recommendedEtfs
+          );
           setEtfRecommendations([]);
         }
       } else {
